@@ -1,6 +1,5 @@
 # outputs.tf
-# Module: stack
-# Defines all outputs of module stack
+# Module: subnet
 
 output "web_subnet_id" {
   description = "Unique identifier of the public web tier subnet"

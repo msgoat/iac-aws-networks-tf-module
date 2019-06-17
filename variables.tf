@@ -53,6 +53,11 @@ variable "network_cidr" {
 
 variable "inbound_traffic_cidrs" {
   description = "The IP ranges in CIDR notation allowed to access any public ressource within the network."
-  type        = "list"
+  type        = list(string)
   default     = ["194.76.29.0/24"]
+}
+
+variable "bastion_key_pair_name" {
+  description = "Name of the SSH key pair name to be assigned to the Bastion EC2 instances."
+  default = "key-eu-central-1-cloudtrain-bastion"
 }
