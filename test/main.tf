@@ -5,8 +5,8 @@
 # ----------------------------------------------------------------------------
 
 provider "aws" {
-  region = "${var.region_name}"
-  version = "~> 1.37"
+  region  = var.region_name
+  version = "~> 2.7"
 }
 
 # Local values used in this module
@@ -21,11 +21,15 @@ locals {
 
 # --- Network (VPC, Subnets) ---------------------------
 
-module "vpc" {
-  source = "./modules/vpc"
-  region_name = "${var.region_name}"
-  network_name = "${var.network_name}"
-  network_cidr = "${var.network_cidr}"
-  custom_tags = "${local.custom_tags}"
-  inbound_traffic_cidrs = ["${var.inbound_traffic_cidrs}"]
+module "network" {
+  source = "../."
+  region_name = var.region_name
+  organization_name = var.organization_name
+  department_name = var.department_name
+  project_name = var.project_name
+  stage = var.stage
+  network_name = var.network_name
+  network_cidr = var.network_cidr
+  inbound_traffic_cidrs = var.inbound_traffic_cidrs
+  bastion_key_pair_name = var.bastion_key_pair_name
 }

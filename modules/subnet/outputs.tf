@@ -13,5 +13,5 @@ output "app_subnet_id" {
 
 output "data_subnet_id" {
   description = "Unique identifier of the private data tier subnet"
-  value = "${aws_subnet.app_subnet.id}"
+  value = "${aws_subnet.data_subnet.id}"
 }
