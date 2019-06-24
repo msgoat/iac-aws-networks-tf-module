@@ -44,6 +44,7 @@ module "subnet_zone0" {
   zone_index      = 0
   zone_cidr_block = cidrsubnet(var.network_cidr, 2, 0)
   common_tags     = local.networks_common_tags
+  with_eks_support = var.with_eks_support
 }
 
 module "subnet_zone1" {
@@ -54,6 +55,7 @@ module "subnet_zone1" {
   zone_index      = 1
   zone_cidr_block = cidrsubnet(var.network_cidr, 2, 1)
   common_tags     = local.networks_common_tags
+  with_eks_support = var.with_eks_support
 }
 
 module "subnet_zone2" {
@@ -64,6 +66,7 @@ module "subnet_zone2" {
   zone_index      = 2
   zone_cidr_block = cidrsubnet(var.network_cidr, 2, 2)
   common_tags     = local.networks_common_tags
+  with_eks_support = var.with_eks_support
 }
 
 # --- NAT Gateways ---------------------------

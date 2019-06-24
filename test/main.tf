@@ -12,10 +12,10 @@ provider "aws" {
 # Local values used in this module
 locals {
   custom_tags = {
-    Organization = "${var.organization_name}"
-    Department = "${var.department_name}"
-    Project = "${var.project_name}"
-    Stage = "${var.stage}"
+    Organization = var.organization_name
+    Department = var.department_name
+    Project = var.project_name
+    Stage = var.stage
   }
 }
 
@@ -32,4 +32,5 @@ module "network" {
   network_cidr = var.network_cidr
   inbound_traffic_cidrs = var.inbound_traffic_cidrs
   bastion_key_pair_name = var.bastion_key_pair_name
+  with_eks_support = var.with_eks_support
 }

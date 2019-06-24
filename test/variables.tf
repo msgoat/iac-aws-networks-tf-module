@@ -45,3 +45,8 @@ variable "bastion_key_pair_name" {
   description = "Name of the SSH key pair name to be assigned to the Bastion EC2 instances."
   default = "key-eu-central-1-cloudtrain-bastion"
 }
+
+variable "with_eks_support" {
+  type = bool
+  default = true
+}

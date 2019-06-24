@@ -27,3 +27,9 @@ variable "common_tags" {
   type = "map"
 }
 
+variable "with_eks_support" {
+  description = "Controls AWS EKS support in the newly created VPC."
+  type = bool
+  default = false
+}
+
