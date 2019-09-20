@@ -3,7 +3,7 @@
 
 # Local values used in this module
 locals {
-  nat_common_tags = merge(var.common_tags)
+  bastion_common_tags = merge(var.common_tags)
   bastion_name    = lower(var.network_name)
 }
 
@@ -40,10 +40,13 @@ resource "aws_instance" "bastion" {
     volume_type = var.bastion_root_volume_type
     volume_size = var.bastion_root_volume_size
   }
+  volume_tags = merge(map(
+    "Name", "vol-${data.aws_availability_zone.zone.name}-${local.bastion_name}-bastion",
+  ), local.bastion_common_tags)
   tags = merge(map(
     "Name", "ec2-${data.aws_availability_zone.zone.name}-${local.bastion_name}-bastion",
     "Role", "bastion"
-  ), local.nat_common_tags)
+  ), local.bastion_common_tags)
 }
 
 # Security group for bastion instance
@@ -67,5 +70,5 @@ resource "aws_security_group" "bastion_security_group" {
   }
   tags = merge(map(
     "Name", "sg-${data.aws_availability_zone.zone.name}-${local.bastion_name}-bastion"
-  ), local.nat_common_tags)
+  ), local.bastion_common_tags)
 }
