@@ -54,3 +54,7 @@ variable "bastion_inbound_cidrs" {
   description = "The IP ranges in CIDR notation allowed to access the Bastion EC2 instances via SSH."
   type = "list"
 }
+
+variable "bastion_iam_instance_profile_name" {
+  description = "The name of an IAM instance profile to be attached to all Bastion EC2 instances."
+}

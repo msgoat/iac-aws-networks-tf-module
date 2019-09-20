@@ -31,6 +31,7 @@ resource "aws_instance" "bastion" {
   ami                         = var.bastion_ami_id
   availability_zone           = data.aws_availability_zone.zone.name
   instance_type               = var.bastion_instance_type
+  iam_instance_profile        = var.bastion_iam_instance_profile_name
   key_name                    = var.bastion_key_pair_name
   vpc_security_group_ids      = [aws_security_group.bastion_security_group.id]
   subnet_id                   = var.public_subnet_id

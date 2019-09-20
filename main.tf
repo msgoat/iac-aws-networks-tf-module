@@ -107,6 +107,14 @@ module "nat_gateway_zone2" {
   private_subnet_ids  = [module.subnet_zone2.app_subnet_id, module.subnet_zone2.data_subnet_id]
 }
 
+# --- IAM EC2 Instance Profile for Bastion Servers ---------------------------
+
+module "bastion_iam_instance_profile" {
+  source           = "./modules/bastion_iam_instance_profile"
+  network_name     = var.network_name
+  common_tags      = local.networks_common_tags
+}
+
 # --- Bastion Servers ---------------------------
 
 module "bastion_zone0" {
@@ -117,8 +125,10 @@ module "bastion_zone0" {
   zone_index       = 0
   common_tags      = local.networks_common_tags
   public_subnet_id = module.subnet_zone0.web_subnet_id
+  bastion_instance_type = var.bastion_instance_type
   bastion_key_pair_name = var.bastion_key_pair_name
   bastion_inbound_cidrs = var.inbound_traffic_cidrs
+  bastion_iam_instance_profile_name = module.bastion_iam_instance_profile.profile_name
 }
 
 module "bastion_zone1" {
@@ -129,8 +139,10 @@ module "bastion_zone1" {
   zone_index       = 1
   common_tags      = local.networks_common_tags
   public_subnet_id = module.subnet_zone1.web_subnet_id
+  bastion_instance_type = var.bastion_instance_type
   bastion_key_pair_name = var.bastion_key_pair_name
   bastion_inbound_cidrs = var.inbound_traffic_cidrs
+  bastion_iam_instance_profile_name = module.bastion_iam_instance_profile.profile_name
 }
 
 module "bastion_zone2" {
@@ -141,7 +153,9 @@ module "bastion_zone2" {
   zone_index       = 2
   common_tags      = local.networks_common_tags
   public_subnet_id = module.subnet_zone2.web_subnet_id
+  bastion_instance_type = var.bastion_instance_type
   bastion_key_pair_name = var.bastion_key_pair_name
   bastion_inbound_cidrs = var.inbound_traffic_cidrs
+  bastion_iam_instance_profile_name = module.bastion_iam_instance_profile.profile_name
 }
 

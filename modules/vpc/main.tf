@@ -5,12 +5,12 @@
 # three-tier stack (web, application, datastore).
 
 provider "aws" {
-  region = "${var.region_name}"
+  region = var.region_name
 }
 
 # Local values used in this module
 locals {
-  vpc_common_tags = "${merge(var.common_tags)}"
+  vpc_common_tags = merge(var.common_tags)
 }
 
 # --- VPC --------------------------------------------------------------------
@@ -21,7 +21,8 @@ resource "aws_vpc" "vpc" {
   # all public available instances should have DNS names
   enable_dns_hostnames = true
   enable_dns_support = true
-  tags = "${merge(map("Name", "vpc-${var.region_name}-${lower(var.network_name)}"), local.vpc_common_tags)}"
+  tags = "${merge(map("Name", "vpc-${var.region_name}-${lower(var.network_name)}"),
+          local.vpc_common_tags)}"
 }
 
 # --- Internet Gateway -------------------------------------------------------
