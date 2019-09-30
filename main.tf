@@ -40,7 +40,7 @@ module "subnet_zone0" {
   source          = "./modules/subnet"
   network_name    = var.network_name
   network_id      = module.vpc.network_id
-  zone_name       = element(data.aws_availability_zones.zone_names.names, 0)
+  zone_name       = data.aws_availability_zones.zone_names.names[0]
   zone_index      = 0
   zone_cidr_block = cidrsubnet(var.network_cidr, 2, 0)
   common_tags     = local.networks_common_tags
@@ -51,7 +51,7 @@ module "subnet_zone1" {
   source          = "./modules/subnet"
   network_name    = var.network_name
   network_id      = module.vpc.network_id
-  zone_name       = element(data.aws_availability_zones.zone_names.names, 1)
+  zone_name       = data.aws_availability_zones.zone_names.names[1]
   zone_index      = 1
   zone_cidr_block = cidrsubnet(var.network_cidr, 2, 1)
   common_tags     = local.networks_common_tags
@@ -62,7 +62,7 @@ module "subnet_zone2" {
   source          = "./modules/subnet"
   network_name    = var.network_name
   network_id      = module.vpc.network_id
-  zone_name       = element(data.aws_availability_zones.zone_names.names, 2)
+  zone_name       = data.aws_availability_zones.zone_names.names[2]
   zone_index      = 2
   zone_cidr_block = cidrsubnet(var.network_cidr, 2, 2)
   common_tags     = local.networks_common_tags
@@ -76,7 +76,7 @@ module "nat_gateway_zone0" {
   network_name        = var.network_name
   network_id          = module.vpc.network_id
   internet_gateway_id = module.vpc.internet_gateway_id
-  zone_name           = element(data.aws_availability_zones.zone_names.names, 0)
+  zone_name           = data.aws_availability_zones.zone_names.names[0]
   zone_index          = 0
   common_tags         = local.networks_common_tags
   public_subnet_id    = module.subnet_zone0.web_subnet_id
@@ -88,7 +88,7 @@ module "nat_gateway_zone1" {
   network_name        = var.network_name
   network_id          = module.vpc.network_id
   internet_gateway_id = module.vpc.internet_gateway_id
-  zone_name           = element(data.aws_availability_zones.zone_names.names, 1)
+  zone_name           = data.aws_availability_zones.zone_names.names[1]
   zone_index          = 1
   common_tags         = local.networks_common_tags
   public_subnet_id    = module.subnet_zone1.web_subnet_id
@@ -100,7 +100,7 @@ module "nat_gateway_zone2" {
   network_name        = var.network_name
   network_id          = module.vpc.network_id
   internet_gateway_id = module.vpc.internet_gateway_id
-  zone_name           = element(data.aws_availability_zones.zone_names.names, 2)
+  zone_name           = data.aws_availability_zones.zone_names.names[2]
   zone_index          = 2
   common_tags         = local.networks_common_tags
   public_subnet_id    = module.subnet_zone2.web_subnet_id
@@ -121,7 +121,7 @@ module "bastion_zone0" {
   source           = "./modules/bastion"
   network_name     = var.network_name
   network_id       = module.vpc.network_id
-  zone_name        = element(data.aws_availability_zones.zone_names.names, 0)
+  zone_name        = data.aws_availability_zones.zone_names.names[0]
   zone_index       = 0
   common_tags      = local.networks_common_tags
   public_subnet_id = module.subnet_zone0.web_subnet_id
@@ -135,7 +135,7 @@ module "bastion_zone1" {
   source           = "./modules/bastion"
   network_name     = var.network_name
   network_id       = module.vpc.network_id
-  zone_name        = element(data.aws_availability_zones.zone_names.names, 1)
+  zone_name        = data.aws_availability_zones.zone_names.names[1]
   zone_index       = 1
   common_tags      = local.networks_common_tags
   public_subnet_id = module.subnet_zone1.web_subnet_id
@@ -149,7 +149,7 @@ module "bastion_zone2" {
   source           = "./modules/bastion"
   network_name     = var.network_name
   network_id       = module.vpc.network_id
-  zone_name        = element(data.aws_availability_zones.zone_names.names, 2)
+  zone_name        = data.aws_availability_zones.zone_names.names[2]
   zone_index       = 2
   common_tags      = local.networks_common_tags
   public_subnet_id = module.subnet_zone2.web_subnet_id

@@ -61,45 +61,6 @@ resource "aws_nat_gateway" "ngw" {
   ), local.nat_common_tags)
 }
 
-# Security group for NAT instances
-resource "aws_security_group" "nat_security_group" {
-  name = "sec-${data.aws_availability_zone.zone.name}-${local.nat_name}-nat"
-  description = "Controls all inbound and outbound traffic passed through the NAT gateway"
-  vpc_id = data.aws_vpc.vpc.id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.vpc.cidr_block]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.vpc.cidr_block]
-  }
-
-  egress {
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
-  }
-
-  tags = merge(map(
-    "Name", "sg-${data.aws_availability_zone.zone.name}-${local.nat_name}-nat"
-  ), local.nat_common_tags)
-}
-
 # Route tables ---------------------------------------------------------------
 
 # route all outbound internet traffic from public subnets through the Internet Gateway

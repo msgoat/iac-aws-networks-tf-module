@@ -17,18 +17,18 @@ locals {
 
 # Create a VPC to launch our instances into
 resource "aws_vpc" "vpc" {
-  cidr_block = "${var.network_cidr}"
+  cidr_block = var.network_cidr
   # all public available instances should have DNS names
   enable_dns_hostnames = true
   enable_dns_support = true
-  tags = "${merge(map("Name", "vpc-${var.region_name}-${lower(var.network_name)}"),
-          local.vpc_common_tags)}"
+  tags = merge(map("Name", "vpc-${var.region_name}-${lower(var.network_name)}"),
+          local.vpc_common_tags)
 }
 
 # --- Internet Gateway -------------------------------------------------------
 
 # Create an internet gateway to give our subnet access to the outside world
 resource "aws_internet_gateway" "igw" {
-  vpc_id = "${aws_vpc.vpc.id}"
-  tags = "${merge(map("Name", "igw-${var.region_name}-${lower(var.network_name)}"), local.vpc_common_tags)}"
+  vpc_id = aws_vpc.vpc.id
+  tags = merge(map("Name", "igw-${var.region_name}-${lower(var.network_name)}"), local.vpc_common_tags)
 }
