@@ -55,12 +55,16 @@ variable "bastion_instance_type" {
   default = "t3.micro"
 }
 
+variable "bastion_ami_id" {
+  description = "Unique identifier of the AMI to be used for the Bastion EC2 instances. Optional, default: ami-07658cefc84cddb14"
+  default = "ami-07658cefc84cddb14"
+}
+
 variable "bastion_key_pair_name" {
   description = "Name of the SSH key pair name to be assigned to the Bastion EC2 instances."
 }
 
-variable "with_eks_support" {
-  description = "Controls AWS EKS support in the newly created VPC."
-  type = bool
-  default = false
+variable "eks_cluster_name" {
+  description = "AWS EKS cluster name to annotate VPC and subnets"
+  default = ""
 }

@@ -12,8 +12,8 @@ locals {
   subnet_common_tags = merge(var.common_tags)
   subnet_name = lower(var.network_name)
   # add required AWS EKS tags to web and application tier subnets if EKS support is activated
-  web_subnet_common_tags = var.with_eks_support ? map("Tier", "web", "kubernetes.io/role/elb", "1") : map("Tier", "web")
-  app_subnet_common_tags = var.with_eks_support ? map("Tier", "app", "kubernetes.io/role/internal-elb", "1") : map("Tier", "app")
+  web_subnet_common_tags = var.eks_cluster_name != "" ? map("Tier", "web", "kubernetes.io/role/elb", "1", "kubernetes.io/cluster/${var.eks_cluster_name}", "shared") : map("Tier", "web")
+  app_subnet_common_tags = var.eks_cluster_name != "" ? map("Tier", "app", "kubernetes.io/role/internal-elb", "1", "kubernetes.io/cluster/${var.eks_cluster_name}", "shared") : map("Tier", "app")
 }
 
 # Retrieve information about the specified Availability Zone

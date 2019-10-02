@@ -28,7 +28,6 @@ variable "common_tags" {
 
 variable "bastion_ami_id" {
   description = "Unique identifier of the AMI to be used for the Bastion EC2 instances."
-  default = "ami-0427098429ee46731" # Fedora-Cloud-Base-30-20190525.0.x86_64-hvm-eu-central-1-standard-0
 }
 
 variable "bastion_instance_type" {

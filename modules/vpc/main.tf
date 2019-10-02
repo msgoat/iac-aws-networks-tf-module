@@ -10,7 +10,7 @@ provider "aws" {
 
 # Local values used in this module
 locals {
-  vpc_common_tags = merge(var.common_tags)
+  vpc_common_tags = var.common_tags
 }
 
 # --- VPC --------------------------------------------------------------------
@@ -21,8 +21,10 @@ resource "aws_vpc" "vpc" {
   # all public available instances should have DNS names
   enable_dns_hostnames = true
   enable_dns_support = true
-  tags = merge(map("Name", "vpc-${var.region_name}-${lower(var.network_name)}"),
-          local.vpc_common_tags)
+  tags = var.eks_cluster_name != "" ? merge(
+  map( "Name", "vpc-${var.region_name}-${lower(var.network_name)}",
+  "kubernetes.io/cluster/${var.eks_cluster_name}", "shared"),
+  local.vpc_common_tags) : merge(map("Name", "vpc-${var.region_name}-${lower(var.network_name)}"), local.vpc_common_tags)
 }
 
 # --- Internet Gateway -------------------------------------------------------

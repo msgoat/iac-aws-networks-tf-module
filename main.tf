@@ -28,6 +28,7 @@ module "vpc" {
   network_cidr          = var.network_cidr
   common_tags           = local.networks_common_tags
   inbound_traffic_cidrs = var.inbound_traffic_cidrs
+  eks_cluster_name      = var.eks_cluster_name
 }
 
 # --- Network (Subnets) ---------------------------
@@ -44,7 +45,7 @@ module "subnet_zone0" {
   zone_index      = 0
   zone_cidr_block = cidrsubnet(var.network_cidr, 2, 0)
   common_tags     = local.networks_common_tags
-  with_eks_support = var.with_eks_support
+  eks_cluster_name = var.eks_cluster_name
 }
 
 module "subnet_zone1" {
@@ -55,7 +56,7 @@ module "subnet_zone1" {
   zone_index      = 1
   zone_cidr_block = cidrsubnet(var.network_cidr, 2, 1)
   common_tags     = local.networks_common_tags
-  with_eks_support = var.with_eks_support
+  eks_cluster_name = var.eks_cluster_name
 }
 
 module "subnet_zone2" {
@@ -66,7 +67,7 @@ module "subnet_zone2" {
   zone_index      = 2
   zone_cidr_block = cidrsubnet(var.network_cidr, 2, 2)
   common_tags     = local.networks_common_tags
-  with_eks_support = var.with_eks_support
+  eks_cluster_name = var.eks_cluster_name
 }
 
 # --- NAT Gateways ---------------------------
@@ -129,6 +130,7 @@ module "bastion_zone0" {
   bastion_key_pair_name = var.bastion_key_pair_name
   bastion_inbound_cidrs = var.inbound_traffic_cidrs
   bastion_iam_instance_profile_name = module.bastion_iam_instance_profile.profile_name
+  bastion_ami_id = var.bastion_ami_id
 }
 
 module "bastion_zone1" {
@@ -143,6 +145,7 @@ module "bastion_zone1" {
   bastion_key_pair_name = var.bastion_key_pair_name
   bastion_inbound_cidrs = var.inbound_traffic_cidrs
   bastion_iam_instance_profile_name = module.bastion_iam_instance_profile.profile_name
+  bastion_ami_id = var.bastion_ami_id
 }
 
 module "bastion_zone2" {
@@ -157,5 +160,6 @@ module "bastion_zone2" {
   bastion_key_pair_name = var.bastion_key_pair_name
   bastion_inbound_cidrs = var.inbound_traffic_cidrs
   bastion_iam_instance_profile_name = module.bastion_iam_instance_profile.profile_name
+  bastion_ami_id = var.bastion_ami_id
 }
 

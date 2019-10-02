@@ -32,5 +32,5 @@ module "network" {
   network_cidr = var.network_cidr
   inbound_traffic_cidrs = var.inbound_traffic_cidrs
   bastion_key_pair_name = var.bastion_key_pair_name
-  with_eks_support = var.with_eks_support
+  eks_cluster_name = var.eks_cluster_name
 }
