@@ -118,48 +118,19 @@ module "bastion_iam_instance_profile" {
 
 # --- Bastion Servers ---------------------------
 
-module "bastion_zone0" {
-  source           = "./modules/bastion"
-  network_name     = var.network_name
-  network_id       = module.vpc.network_id
-  zone_name        = data.aws_availability_zones.zone_names.names[0]
-  zone_index       = 0
-  common_tags      = local.networks_common_tags
-  public_subnet_id = module.subnet_zone0.web_subnet_id
+module "bastion_group" {
+  source = "./modules/bastion_group"
+  organization_name = var.organization_name
+  department_name = var.department_name
+  project_name = var.project_name
+  stage = var.stage
+  network_name = var.network_name
+  network_id = module.vpc.network_id
+  common_tags = local.networks_common_tags
+  public_subnet_ids = [module.subnet_zone0.web_subnet_id, module.subnet_zone1.web_subnet_id, module.subnet_zone2.web_subnet_id]
   bastion_instance_type = var.bastion_instance_type
   bastion_key_pair_name = var.bastion_key_pair_name
   bastion_inbound_cidrs = var.inbound_traffic_cidrs
   bastion_iam_instance_profile_name = module.bastion_iam_instance_profile.profile_name
   bastion_ami_id = var.bastion_ami_id
 }
-
-module "bastion_zone1" {
-  source           = "./modules/bastion"
-  network_name     = var.network_name
-  network_id       = module.vpc.network_id
-  zone_name        = data.aws_availability_zones.zone_names.names[1]
-  zone_index       = 1
-  common_tags      = local.networks_common_tags
-  public_subnet_id = module.subnet_zone1.web_subnet_id
-  bastion_instance_type = var.bastion_instance_type
-  bastion_key_pair_name = var.bastion_key_pair_name
-  bastion_inbound_cidrs = var.inbound_traffic_cidrs
-  bastion_iam_instance_profile_name = module.bastion_iam_instance_profile.profile_name
-  bastion_ami_id = var.bastion_ami_id
-}
-
-module "bastion_zone2" {
-  source           = "./modules/bastion"
-  network_name     = var.network_name
-  network_id       = module.vpc.network_id
-  zone_name        = data.aws_availability_zones.zone_names.names[2]
-  zone_index       = 2
-  common_tags      = local.networks_common_tags
-  public_subnet_id = module.subnet_zone2.web_subnet_id
-  bastion_instance_type = var.bastion_instance_type
-  bastion_key_pair_name = var.bastion_key_pair_name
-  bastion_inbound_cidrs = var.inbound_traffic_cidrs
-  bastion_iam_instance_profile_name = module.bastion_iam_instance_profile.profile_name
-  bastion_ami_id = var.bastion_ami_id
-}
-
