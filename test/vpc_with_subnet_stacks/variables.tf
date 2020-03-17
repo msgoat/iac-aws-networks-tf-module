@@ -1,5 +1,3 @@
-# variables.tf
-
 variable "region_name" {
   description = "The AWS region to deploy into (e.g. eu-central-1)."
 }
@@ -26,15 +24,7 @@ variable "network_name" {
 
 variable "network_cidr" {
   description = "The CIDR range of the VPC."
-}
-
-variable "inbound_traffic_cidrs" {
-  description = "The IP ranges in CIDR notation allowed to access any public ressource within the network."
-  type        = "list"
-}
-
-variable "bastion_key_pair_name" {
-  description = "Name of the SSH key pair name to be assigned to the Bastion EC2 instances."
+  default     = "10.0.0.0/16"
 }
 
 variable "eks_cluster_name" {

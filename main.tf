@@ -27,7 +27,6 @@ module "vpc" {
   network_name          = var.network_name
   network_cidr          = var.network_cidr
   common_tags           = local.networks_common_tags
-  inbound_traffic_cidrs = var.inbound_traffic_cidrs
   eks_cluster_name      = var.eks_cluster_name
 }
 
@@ -106,31 +105,4 @@ module "nat_gateway_zone2" {
   common_tags         = local.networks_common_tags
   public_subnet_id    = module.subnet_zone2.web_subnet_id
   private_subnet_ids  = [module.subnet_zone2.app_subnet_id, module.subnet_zone2.data_subnet_id]
-}
-
-# --- IAM EC2 Instance Profile for Bastion Servers ---------------------------
-
-module "bastion_iam_instance_profile" {
-  source           = "./modules/bastion_iam_instance_profile"
-  network_name     = var.network_name
-  common_tags      = local.networks_common_tags
-}
-
-# --- Bastion Servers ---------------------------
-
-module "bastion_group" {
-  source = "./modules/bastion_group"
-  organization_name = var.organization_name
-  department_name = var.department_name
-  project_name = var.project_name
-  stage = var.stage
-  network_name = var.network_name
-  network_id = module.vpc.network_id
-  common_tags = local.networks_common_tags
-  public_subnet_ids = [module.subnet_zone0.web_subnet_id, module.subnet_zone1.web_subnet_id, module.subnet_zone2.web_subnet_id]
-  bastion_instance_type = var.bastion_instance_type
-  bastion_key_pair_name = var.bastion_key_pair_name
-  bastion_inbound_cidrs = var.inbound_traffic_cidrs
-  bastion_iam_instance_profile_name = module.bastion_iam_instance_profile.profile_name
-  bastion_ami_id = var.bastion_ami_id
 }

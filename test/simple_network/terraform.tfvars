@@ -11,4 +11,3 @@ stage = "dev"
 network_name = "iacvpctest"
 network_cidr  = "10.0.0.0/16"
 inbound_traffic_cidrs = ["0.0.0.0/0"]
-bastion_key_pair_name = "key-eu-central-1-cloudtrain-bastion"
