@@ -24,7 +24,7 @@ variable "zone_cidr_block" {
 
 variable "common_tags" {
   description = "Common tags to be attached to each AWS resource"
-  type = "map"
+  type = map
 }
 
 variable "eks_cluster_name" {

@@ -27,11 +27,11 @@ variable "public_subnet_id" {
 
 variable "private_subnet_ids" {
   description = "Unique identifiers of the private subnets supposed to be protected by the NAT Gateway."
-  type = "list"
+  type = list(string)
 }
 
 variable "common_tags" {
   description = "Common tags to be attached to each AWS resource"
-  type = "map"
+  type = map(string)
 }
 
