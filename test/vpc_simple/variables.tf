@@ -1,5 +1,3 @@
-# variables.tf
-
 variable "region_name" {
   description = "The AWS region to deploy into (e.g. eu-central-1)."
 }
@@ -26,9 +24,10 @@ variable "network_name" {
 
 variable "network_cidr" {
   description = "The CIDR range of the VPC."
+  default     = "10.0.0.0/16"
 }
 
-variable "inbound_traffic_cidrs" {
-  description = "The IP ranges in CIDR notation allowed to access any public ressource within the network."
-  type        = list(string)
+variable "eks_cluster_name" {
+  description = "AWS EKS cluster name to annotate VPC and subnets"
+  default = ""
 }
