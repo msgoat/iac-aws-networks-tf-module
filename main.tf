@@ -32,77 +32,37 @@ module "vpc" {
 
 # --- Network (Subnets) ---------------------------
 
-# Retrieve all availability zones in specified region
-data "aws_availability_zones" "zone_names" {
+data "aws_availability_zones" "zones_to_span" {
+  state = "available"
 }
 
-module "subnet_zone0" {
-  source          = "./modules/subnet"
-  network_name    = var.network_name
-  network_id      = module.vpc.network_id
-  zone_name       = data.aws_availability_zones.zone_names.names[0]
-  zone_index      = 0
-  zone_cidr_block = cidrsubnet(var.network_cidr, 2, 0)
-  common_tags     = local.networks_common_tags
+locals {
+  subnet_cidrs = cidrsubnets(var.network_cidr, 8, 8, 8, 4, 4, 4, 4, 4, 4)
+  public_subnet_cidrs = slice(local.subnet_cidrs, 0, 3)
+  private_subnet_cidrs = slice(local.subnet_cidrs, 3, 9)
+}
+
+module "subnets" {
+  source = "./modules/subnet_stacks"
+  common_tags = local.networks_common_tags
   eks_cluster_name = var.eks_cluster_name
-}
-
-module "subnet_zone1" {
-  source          = "./modules/subnet"
-  network_name    = var.network_name
-  network_id      = module.vpc.network_id
-  zone_name       = data.aws_availability_zones.zone_names.names[1]
-  zone_index      = 1
-  zone_cidr_block = cidrsubnet(var.network_cidr, 2, 1)
-  common_tags     = local.networks_common_tags
-  eks_cluster_name = var.eks_cluster_name
-}
-
-module "subnet_zone2" {
-  source          = "./modules/subnet"
-  network_name    = var.network_name
-  network_id      = module.vpc.network_id
-  zone_name       = data.aws_availability_zones.zone_names.names[2]
-  zone_index      = 2
-  zone_cidr_block = cidrsubnet(var.network_cidr, 2, 2)
-  common_tags     = local.networks_common_tags
-  eks_cluster_name = var.eks_cluster_name
-}
-
-# --- NAT Gateways ---------------------------
-
-module "nat_gateway_zone0" {
-  source              = "./modules/nat_gateway"
-  network_name        = var.network_name
-  network_id          = module.vpc.network_id
+  network_id = module.vpc.network_id
+  network_name = var.network_name
+  number_of_subnets_per_zone = 3
+  public_subnets_per_zone = 1
+  private_subnets_per_zone = 2
+  zone_names = data.aws_availability_zones.zones_to_span.names
+  public_subnet_cidrs = local.public_subnet_cidrs
+  private_subnet_cidrs = local.private_subnet_cidrs
   internet_gateway_id = module.vpc.internet_gateway_id
-  zone_name           = data.aws_availability_zones.zone_names.names[0]
-  zone_index          = 0
-  common_tags         = local.networks_common_tags
-  public_subnet_id    = module.subnet_zone0.web_subnet_id
-  private_subnet_ids  = [module.subnet_zone0.app_subnet_id, module.subnet_zone0.data_subnet_id]
 }
 
-module "nat_gateway_zone1" {
-  source              = "./modules/nat_gateway"
-  network_name        = var.network_name
-  network_id          = module.vpc.network_id
-  internet_gateway_id = module.vpc.internet_gateway_id
-  zone_name           = data.aws_availability_zones.zone_names.names[1]
-  zone_index          = 1
-  common_tags         = local.networks_common_tags
-  public_subnet_id    = module.subnet_zone1.web_subnet_id
-  private_subnet_ids  = [module.subnet_zone1.app_subnet_id, module.subnet_zone1.data_subnet_id]
-}
-
-module "nat_gateway_zone2" {
-  source              = "./modules/nat_gateway"
-  network_name        = var.network_name
-  network_id          = module.vpc.network_id
-  internet_gateway_id = module.vpc.internet_gateway_id
-  zone_name           = data.aws_availability_zones.zone_names.names[2]
-  zone_index          = 2
-  common_tags         = local.networks_common_tags
-  public_subnet_id    = module.subnet_zone2.web_subnet_id
-  private_subnet_ids  = [module.subnet_zone2.app_subnet_id, module.subnet_zone2.data_subnet_id]
+module "nat_gateways" {
+  source = "./modules/nat_gateways"
+  common_tags = local.networks_common_tags
+  network_id = module.vpc.network_id
+  network_name = var.network_name
+  zone_names = data.aws_availability_zones.zones_to_span.names
+  public_subnet_ids = module.subnets.public_subnet_ids
+  private_subnet_ids = module.subnets.private_subnet_ids
 }
