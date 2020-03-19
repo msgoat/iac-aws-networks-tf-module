@@ -7,16 +7,16 @@ resource "aws_route_table" "nat" {
     nat_gateway_id = aws_nat_gateway.nat_gateways[count.index].id
   }
   tags = merge(map(
-  "Name", "rtb-${local.zones_with_public_subnets[count.index]}-${local.nat_name}-ngw"
+  "Name", "rtb-${var.zone_names[count.index]}-${local.nat_name}-ngw"
   ), local.nat_common_tags)
 }
 
 locals {
-  nat_route_table_index_by_zone = { for zone_name in local.zones_with_private_subnets :
-    zone_name => index(local.zones_with_private_subnets, zone_name) < local.allocation_size ? index(local.zones_with_private_subnets, zone_name) : 0
+  nat_route_table_index_by_zone = { for zone_name in var.zone_names :
+    zone_name => index(var.zone_names, zone_name) < local.allocation_size ? index(var.zone_names, zone_name) : 0
   }
   nat_route_table_by_zone = { for zone_name, index in local.nat_route_table_index_by_zone :
-    zone_name => aws_route_table.nat[index].id }
+    zone_name => aws_route_table.nat[index].id if length(aws_route_table.nat) != 0}
 }
 
 resource "aws_route_table_association" "nat" {

@@ -6,6 +6,10 @@ variable "network_name" {
   description = "The name suffix of the VPC."
 }
 
+variable "zone_names" {
+  description = "Names of all availability zones which should be covered with NAT gateways"
+}
+
 variable "public_subnet_ids" {
   description = "Unique identifier of all public subnets which should host a NAT gateway (i.e. one public subnet per zone)"
   type = list(string)

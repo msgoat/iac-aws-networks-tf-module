@@ -52,6 +52,7 @@ module "subnets" {
 module "nat_gateways" {
   source = "../../modules/nat_gateways"
   common_tags = local.network_common_tags
+  zone_names = data.aws_availability_zones.zones_to_span.names
   network_id = module.vpc.network_id
   network_name = var.network_name
   public_subnet_ids = module.subnets.public_subnet_ids

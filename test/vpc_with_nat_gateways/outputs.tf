@@ -13,10 +13,6 @@ output "private_subnet_ids" {
   value = module.subnets.private_subnet_ids
 }
 
-output "zones_with_public_subnets" {
-  value = module.nat_gateways.zones_with_public_subnets
-}
-
-output "public_subnets_by_zone" {
-  value = module.nat_gateways.public_subnets_by_zone
+output "nat_gateway_ids" {
+  value = module.nat_gateways.nat_gateway_ids
 }
