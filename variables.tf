@@ -1,8 +1,3 @@
-# variables.tf
-# ----------------------------------------------------------------------------
-# Defines all input variables of this Terraform module.
-# ----------------------------------------------------------------------------
-
 variable "region_name" {
   description = "The AWS region to deploy into (e.g. eu-central-1)."
 }
@@ -29,7 +24,6 @@ variable "network_name" {
 
 variable "network_cidr" {
   description = "The CIDR range of the VPC."
-  default     = "10.0.0.0/16"
 }
 
 variable "inbound_traffic_cidrs" {

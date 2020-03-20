@@ -1,6 +1,6 @@
-# Terraform submodule nat_instances
+# Terraform submodule nat_gateways
 
-Adds NAT instances and NAT routing to a given VPC.
+Adds NAT gateways and NAT routing to a given VPC.
  
 ## Input Variables
 
@@ -12,11 +12,10 @@ network_name | string | x | Logical name of a VPC the NAT solution will be added
 zone_names | list(string) | x | Names of all availability zones which should be covered with NAT gateways |
 public_subnet_ids | list(string) | x | Unique identifiers of all public subnets which should host a NAT gateway (i.e. one public subnet per zone) |
 private_subnet_ids | list(string) | x | Unique identifiers of all private subnets which should be routed through the NAT gateways |
-max_nat_instances | number |   | Maximum number of NAT instances to be created | One NAT instance per availability zone 
-nat_instance_type | string |   | EC2 instance type for all NAT instances | "t3.micro" 
+max_nat_gateways | number |   | Maximum number of NAT gateways to be created | One NAT gateway per availability zone |
 
 ## Outputs
 
 Output Name | Output Type | Description  
  --- | --- | ---  
-nat_instance_ids | list(string) | Unique identifiers of all newly created NAT instances
+nat_gateway_ids | list(string) | Unique identifiers of all newly created NAT gateways

@@ -1,5 +1,5 @@
 variable "network_id" {
-  description = "Unique identifier of the VPC that will own the stack."
+  description = "Unique identifier of a VPC the NAT solution will be added to."
 }
 
 variable "network_name" {
@@ -8,15 +8,16 @@ variable "network_name" {
 
 variable "zone_names" {
   description = "Names of all availability zones which should be covered with NAT gateways"
+  type = list(string)
 }
 
 variable "public_subnet_ids" {
-  description = "Unique identifier of all public subnets which should host a NAT gateway (i.e. one public subnet per zone)"
+  description = "Unique identifiers of all public subnets which should host a NAT gateway (i.e. one public subnet per zone)"
   type = list(string)
 }
 
 variable "private_subnet_ids" {
-  description = "Unique identifier of all private subnets which should be routed through the NAT gateways"
+  description = "Unique identifiers of all private subnets which should be routed through the NAT gateways"
   type = list(string)
 }
 
@@ -26,6 +27,7 @@ variable "common_tags" {
 }
 
 variable "max_nat_gateways" {
+  description = "Maximum number of NAT gateways to be created"
   type = number
   default = 99
 }

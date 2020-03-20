@@ -12,6 +12,7 @@ variable "internet_gateway_id" {
 
 variable "zone_names" {
   description = "Names of the availability zones which are supposed to host a subnet stack"
+  type = list(string)
 }
 
 variable "number_of_subnets_per_zone" {
