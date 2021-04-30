@@ -1,26 +1,16 @@
-# Terraform module iac-networks-aws-module
+# iac-aws-reference_vpc-tf: Terraform module to set up an AWS reference VPC
 
 Creates a reference network on AWS with a VPC spanning all availability zones of the given AWS region. 
 
 Each availability zone will host a stack of three subnets:
-* one public subnet for all internet-facing resources
-* one private subnet for application resources
-* one private subnet for databases and messaging systems used by your applications
+* one public subnet for all internet-facing resources (web layer)
+* one private subnet for application resources (application layer)
+* one private subnet for databases and messaging systems used by your applications (data layer)
 
-All outbound traffic from private resources running in the private subnets will be routed through NAT gateways 
-(one NAT gateway per availability zone).
+All outbound traffic from private resources running in the private subnets will be routed either through NAT gateways 
+(one NAT gateway per availability zone) or NAT instances (one NAT instance per availability zone). 
 
-If you need a VPC with different characteristics, you can use a mix of the provided submodules to tailor the default 
-implementation to your specific requirements:  
-* submodule [vpc](modules/vpc/README.md) creates an empty VPC including an internet gateway
-* submodule [subnet_stacks](modules/subnet_stacks/README.md) creates a stack of subnets in each availability zone
-* submodule [nat_gateways](modules/nat_gateways/README.md) adds a NAT solution based on AWS NAT Gateways to your subnets
-* submodule [nat_instances](modules/nat_instances/README.md) offers a NAT solution based on AWS NAT Instances
-
-Concrete examples of common use-cases can be found in the test section of this Terraform module:
-* test [vpc_simple](test/vpc_simple/main.tf) demonstrates how to create a simple VPC with public subnets only requiring no NAT solution
-* test [vpc_with_nat_gateways](test/vpc_with_nat_gateways/main.tf) shows how to create a full-blown VPC with NAT gateways
-* test [vpc_with_nat_instances](test/vpc_with_nat_instances/main.tf) shows how to create a full-blown VPC with NAT instances
+Optionally you can have Bastion Servers in an Auto Scaling Group with a configurable number of instances.
  
 ## Input Variables
 
@@ -34,7 +24,12 @@ stage | string | x | The name of the current environment stage |
 network_name | string | x | Logical name of the VPC (will be expanded to actual VPC name "vpc-${region_name}-${network_name}") | 
 network_cidr | string | x | The CIDR range of the VPC (/16 ranges recommended like "10.0.0.0/16") |  
 inbound_traffic_cidrs | list(string) | x | The source IP ranges in CIDR notation allowed to access any public resource within the network. |  
-eks_cluster_name | string |   | Actual name of an AWS EKS cluster, if this VPC should host an AWS EKS cluster; adds EKS support to all created VPCs and subnets | "" 
+nat_strategy | string |  | NAT strategy to be applied to VPC. Possible values are: NAT_GATEWAY (default) or NAT_INSTANCE | "NATGATEWAY" 
+nat_instance_type | string |  | EC2 instance type to be used for the NAT instances; will only be used if nat_strategy == NAT_GATEWAY | "t3.micro"
+number_of_bastion_instances | number |  | Number of bastion EC2 instances that must be always available; may be 0 if you don't need any bastion servers | 1
+bastion_instance_type | string |  | EC2 instance type to be used for the bastion instances | "t3.micro"
+bastion_key_name | string | x | Name of SSH key pair name to used for the bastion instances | 
+bastion_inbound_traffic_cidrs | list(string) |  | The IP ranges in CIDR notation allowed to access the bastion instances | inbound_traffic_cidrs
 
 ## Outputs
 
@@ -43,3 +38,12 @@ Output Name | Output Type | Description
 network_id | string | Unique identifier of the VPC network created by this module
 public_subnet_ids | list(string) | Unique identifiers of all newly created public subnets
 private_subnet_ids | list(string) | Unique identifiers of all newly created private subnets
+vpc_id | string | Unique identifier of the newly created VPC network
+vpc_name | string | Fully qualified name of the newly created VPC network
+bastion_security_group_name | string | Name of the security group applied to all bastion instances
+bastion_security_group_id | string | Unique identifier of the security group applied to all bastion instances
+public_subnet_ids | list(string) | Unique identifiers of all public subnets
+private_subnet_ids | list(string) | Unique identifiers of all private subnets
+web_subnet_ids | list(string) | Unique identifiers of all web subnets
+app_subnet_ids | list(string) | Unique identifiers of all application subnets
+data_subnet_ids | list(string) | Unique identifiers of all datastore subnets
