@@ -9,7 +9,7 @@ locals {
 }
 
 # creates an auto scaling group that ensures the availability of the requested number of bastion instances
-resource "aws_autoscaling_group" "bastion" {
+resource aws_autoscaling_group bastion {
   count = local.bastion_enabled ? 1 : 0
   desired_capacity = var.number_of_bastion_instances
   launch_template {
@@ -23,7 +23,7 @@ resource "aws_autoscaling_group" "bastion" {
 }
 
 # create a launch template for bastion instances
-resource "aws_launch_template" "bastion" {
+resource aws_launch_template bastion {
   count = local.bastion_enabled ? 1 : 0
   name = "lt-${data.aws_region.current.name}-${var.network_name}-bastion"
   description = "Defines instances to be managed by bastion auto scaling group"
@@ -54,7 +54,7 @@ resource "aws_launch_template" "bastion" {
 
 # retrieve the latest AMI version used for all bastion instances
 # @TODO: use custom hardened AMI based on Amazon Linux 2
-data "aws_ami" "bastion" {
+data aws_ami bastion {
   owners = ["137112412989"]
 #  executable_users = ["self"]
   most_recent = "true"
@@ -73,7 +73,7 @@ data "aws_ami" "bastion" {
 }
 
 # Security group for bastion instance
-resource "aws_security_group" "bastion" {
+resource aws_security_group bastion {
   count = local.bastion_enabled ? 1 : 0
   name        = "sec-${data.aws_region.current.name}-${var.network_name}-bastion"
   description = "Controls all inbound and outbound traffic passed through the bastion instances"
