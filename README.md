@@ -1,4 +1,4 @@
-# iac-aws-reference_vpc-tf: Terraform module to set up an AWS reference VPC
+# iac-tf-aws-networks-module: Terraform module to set up an AWS reference VPC
 
 Creates a reference network on AWS with a VPC spanning all availability zones of the given AWS region. 
 
