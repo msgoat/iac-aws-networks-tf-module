@@ -7,6 +7,7 @@ locals {
 }
 
 # create a public web subnet in each availability zone
+# for ( count = 0 ; count < length(..) ; count++ ) {
 resource aws_subnet public_web_subnets {
   count = length(data.aws_availability_zones.zones.names)
   vpc_id = aws_vpc.vpc.id

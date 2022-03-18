@@ -6,6 +6,7 @@
 locals {
   vpc_name = "vpc-${var.region_name}-${var.solution_fqn}-${lower(var.network_name)}"
 }
+
 # Create a VPC to launch our instances into
 resource aws_vpc vpc {
   cidr_block = var.network_cidr
