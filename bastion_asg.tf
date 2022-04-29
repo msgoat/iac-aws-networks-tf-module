@@ -6,6 +6,7 @@
 # Local values used in this module
 locals {
   bastion_name    = lower(var.network_name)
+  asg_tags = merge({Role = "bastion" }, local.module_common_tags)
 }
 
 # creates an auto scaling group that ensures the availability of the requested number of bastion instances
@@ -19,7 +20,14 @@ resource aws_autoscaling_group bastion {
   min_size = var.number_of_bastion_instances
   name = "asg-${data.aws_region.current.name}-${var.network_name}-bastion"
   vpc_zone_identifier = aws_subnet.public_web_subnets.*.id
-  tags = [{Role = "bastion" }, local.module_common_tags]
+  dynamic tag {
+    for_each = local.asg_tags
+    content {
+      key = tag.key
+      value = tag.value
+      propagate_at_launch = true
+    }
+  }
 }
 
 # create a launch template for bastion instances

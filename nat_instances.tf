@@ -94,5 +94,5 @@ resource aws_route nat {
   count = local.number_of_nat_instances
   route_table_id = aws_route_table.private[count.index].id
   destination_cidr_block = "0.0.0.0/0"
-  instance_id = aws_instance.nats[count.index].id
+  network_interface_id = aws_instance.nats[count.index].id
 }
