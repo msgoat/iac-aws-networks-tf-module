@@ -1,5 +1,7 @@
 # iac-tf-aws-networks-module: Terraform module to set up an AWS reference VPC
 
+> __@deprecated__ please use git repo [iac-tf-aws-cloudtrain-modules](https://github.com/msgoat/iac-tf-aws-cloudtrain-modules) instead!
+
 Creates a reference network on AWS with a VPC spanning all availability zones of the given AWS region. 
 
 Each availability zone will host a stack of three subnets:
